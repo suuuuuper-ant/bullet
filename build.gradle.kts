@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.ir.backend.js.compile
 
 plugins {
     id("org.springframework.boot") version "2.5.0"
@@ -32,6 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 //    implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")
+    implementation("com.github.jasync-sql:jasync-mysql:1.1.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
     developmentOnly("org.springframework.boot:spring-boot-devtools")

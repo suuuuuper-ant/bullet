@@ -26,11 +26,8 @@ class SecurityConfig {
     fun securityWebFilterChain(
         http: ServerHttpSecurity,
         jwtAuthenticationManager: ReactiveAuthenticationManager,
-        jwtAuthenticationConverter: ServerAuthenticationConverter,
         securityContextRepository: SecurityContextRepository
     ): SecurityWebFilterChain {
-        val authenticationWebFilter = AuthenticationWebFilter(jwtAuthenticationManager)
-        authenticationWebFilter.setServerAuthenticationConverter(jwtAuthenticationConverter)
 
         return http
             .exceptionHandling()
@@ -51,23 +48,5 @@ class SecurityConfig {
                 .anyExchange().authenticated()
             .and()
             .build()
-//        return http.authorizeExchange()
-//            .pathMatchers("/auth/signup")
-//                .permitAll()
-//            .pathMatchers("/auth/signin")
-//                .permitAll()
-//            .pathMatchers("/user")
-//                .authenticated()
-//            .and()
-//                .addFilterAt(authenticationWebFilter, SecurityWebFiltersOrder.AUTHENTICATION)
-//            .httpBasic()
-//                .disable()
-//            .csrf()
-//                .disable()
-//            .formLogin()
-//                .disable()
-//            .logout()
-//                .disable()
-//            .build()
     }
 }
