@@ -17,8 +17,6 @@ import reactor.core.publisher.Mono
 import org.springframework.security.config.web.server.ServerHttpSecurity.http
 
 
-
-
 @EnableWebFluxSecurity
 class SecurityConfig {
 
