@@ -44,6 +44,16 @@ class JWTUtil {
         return getAllClaimsFromToken(token).expiration
     }
 
+    private fun isTokenMalformed(token: String): Boolean {
+        return try {
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
+            true
+        } catch (e: SignatureException) {
+            println("custom error -> $e")
+            false
+        }
+    }
+
     private fun isTokenExpired(token: String): Boolean {
         val expiration: Date = getExpirationDateFromToken(token)
         return expiration.before(Date())
@@ -70,7 +80,10 @@ class JWTUtil {
 
     fun validateToken(token: String): Boolean {
         return try {
-            !isTokenExpired(token)
+            val isExpired = !isTokenExpired(token)
+            val isMalformed = isTokenMalformed(token)
+
+            isExpired && isMalformed
         } catch (e: Exception) {
             false
         }

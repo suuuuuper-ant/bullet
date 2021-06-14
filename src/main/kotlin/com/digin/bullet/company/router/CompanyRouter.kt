@@ -20,7 +20,7 @@ class CompanyRouter(
     fun route() = coRouter {
         "/companies".nest {
            accept(MediaType.APPLICATION_JSON).nest {
-               GET("/route") { companyHandler.getCompany() }
+               GET("/about") { companyHandler.getCompany() }
            }
         }
     }

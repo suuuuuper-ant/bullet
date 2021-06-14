@@ -1,15 +1,15 @@
 package com.digin.bullet.account.router
 
+import com.digin.bullet.account.handler.AuthHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.web.reactive.function.BodyInserters
-import org.springframework.web.reactive.function.server.RequestPredicates
-import org.springframework.web.reactive.function.server.RouterFunctions
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.router
+import org.springframework.web.reactive.function.server.*
 
 @Configuration
-class AccountRouter {
+class AccountRouter(
+    private val authHandler: AuthHandler
+) {
     @Bean
     fun accountRoute() = RouterFunctions.nest(RequestPredicates.path("/accounts"),
         router {
@@ -20,10 +20,15 @@ class AccountRouter {
     )
     @Bean
     fun authRoute() = RouterFunctions.nest(RequestPredicates.path("/auth"),
-        router {
-            listOf(
-                GET("/signin") { ServerResponse.ok().body(BodyInserters.fromObject(arrayOf(1, 2, 3))) }
-            )
+        coRouter {
+          listOf(
+              GET("/signin") { authHandler.signIn() }
+          )
         }
+//        router {
+//            listOf(
+//                GET("/signin") { ServerResponse.ok().body(BodyInserters.fromObject(arrayOf(1, 2, 3))) }
+//            )
+//        }
     )
 }

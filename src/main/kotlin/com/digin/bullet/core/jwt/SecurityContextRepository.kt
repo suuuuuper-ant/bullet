@@ -23,7 +23,6 @@ class SecurityContextRepository(
             .flatMap { Mono.justOrEmpty(it.request.headers["X-AUTH-TOKEN"]) }
             .filter { it.isNotEmpty() }
             .map { it.first() }
-//            .map { it[0].value }
             .flatMap { authenticationManager
                 .authenticate(UsernamePasswordAuthenticationToken(it, it))
                 .map { i -> SecurityContextImpl(i)} }

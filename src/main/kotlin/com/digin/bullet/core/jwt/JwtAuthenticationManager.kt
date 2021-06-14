@@ -16,7 +16,7 @@ import io.jsonwebtoken.Claims
 
 
 @Component
-class JwtAuthenticationManager(private val jwtSigner: JwtSigner, private val jwtUtil: JWTUtil) : ReactiveAuthenticationManager {
+class JwtAuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthenticationManager {
 //    override fun authenticate(authentication: Authentication): Mono<Authentication> {
 //        return Mono.just(authentication)
 //            .map { jwtSigner.validateJwt(it.credentials as String) }
@@ -32,13 +32,14 @@ class JwtAuthenticationManager(private val jwtSigner: JwtSigner, private val jwt
 
     override fun authenticate(authentication: Authentication): Mono<Authentication> {
         val authToken = authentication.credentials.toString()
-        val username = jwtUtil.getUsernameFromToken(authToken)
+
         return Mono.just(jwtUtil.validateToken(authToken))
             .filter { valid -> valid }
             .switchIfEmpty(Mono.empty())
             .map {
                 val claims = jwtUtil.getAllClaimsFromToken(authToken)
                 val rolesMap: List<String> = claims["role"] as List<String>
+                val username = jwtUtil.getUsernameFromToken(authToken)
                 UsernamePasswordAuthenticationToken(
                     username,
                     null,
