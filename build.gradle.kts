@@ -33,7 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 //    implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")
-    implementation("com.github.jasync-sql:jasync-mysql:1.1.6")
+    implementation("com.github.jasync-sql:jasync-r2dbc-mysql:1.1.6")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
     developmentOnly("org.springframework.boot:spring-boot-devtools")
