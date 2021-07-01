@@ -1,6 +1,6 @@
-package com.digin.bullet.account.model
+package com.digin.bullet.account.model.http.request
 
-data class Account(
+data class SignUpRequest(
     val email: String = "",
     val password: String = "",
     val name: String = "",

@@ -1,6 +1,6 @@
 package com.digin.bullet
 
-import com.digin.bullet.account.domain.repository.AccountRepository
+import com.digin.bullet.account.repository.AccountRepository
 import org.springframework.boot.ApplicationRunner
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

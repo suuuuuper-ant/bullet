@@ -1,18 +1,15 @@
 package com.digin.bullet.core.jwt
 
-import com.digin.bullet.account.model.Account
+import com.digin.bullet.account.model.http.request.SignUpRequest
 import io.jsonwebtoken.security.Keys
 import org.springframework.stereotype.Component
 import java.security.Key
 import io.jsonwebtoken.Jwts
 
 import io.jsonwebtoken.Claims
-import io.jsonwebtoken.JwtParser
-import io.jsonwebtoken.SignatureAlgorithm
 import java.lang.Exception
 import java.security.SignatureException
 import java.util.*
-import javax.annotation.PostConstruct
 
 
 @Component
@@ -59,10 +56,10 @@ class JWTUtil {
         return expiration.before(Date())
     }
 
-    fun generateToken(account: Account): String {
+    fun generateToken(signUpRequest: SignUpRequest): String {
         val claims: MutableMap<String, List<String>> = HashMap()
-        claims["role"] = account.roles
-        return doGenerateToken(claims, account.name)
+        claims["role"] = signUpRequest.roles
+        return doGenerateToken(claims, signUpRequest.name)
     }
 
     private fun doGenerateToken(claims: Map<String, List<String>>, username: String): String {

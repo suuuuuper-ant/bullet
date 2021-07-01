@@ -11,7 +11,8 @@ class Account(id: Long? = null,
               password: String,
               role: String,
               createdAt: LocalDateTime,
-              updatedAt: LocalDateTime) {
+              updatedAt: LocalDateTime
+) {
     @Id
     var id: Long? = id
     var email: String = email
