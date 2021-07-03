@@ -5,13 +5,14 @@ import org.springframework.data.relational.core.mapping.Table
 import java.time.LocalDateTime
 
 @Table("account")
-class Account(id: Long? = null,
-              email: String,
-              name: String,
-              password: String,
-              role: String,
-              createdAt: LocalDateTime,
-              updatedAt: LocalDateTime
+class Account(
+    id: Long? = null,
+    email: String,
+    name: String,
+    password: String,
+    role: String,
+    createdAt: LocalDateTime = LocalDateTime.now(),
+    updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     @Id
     var id: Long? = id
