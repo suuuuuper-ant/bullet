@@ -20,14 +20,10 @@ class AccountRouter(
         }
     )
     @Bean
-    fun authRoute() = RouterFunctions.nest(RequestPredicates.path("/auth"),
-        coRouter {
-            GET("/signin") { authHandler::signIn }
+    fun authRoute() =  coRouter {
+        "/auth".nest {
+            GET("/signin", authHandler::signIn)
         }
-//        router {
-//            listOf(
-//                GET("/signin") { ServerResponse.ok().body(BodyInserters.fromObject(arrayOf(1, 2, 3))) }
-//            )
-//        }
-    )
+
+    }
 }

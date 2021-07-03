@@ -1,16 +1,10 @@
 package com.digin.bullet.account.handler
 
 import arrow.core.Either
-import com.digin.bullet.account.model.exception.AccountException
 import com.digin.bullet.account.service.AccountService
 import com.digin.bullet.core.jwt.JWTUtil
 import org.springframework.stereotype.Component
-import org.springframework.stereotype.Controller
-import org.springframework.stereotype.Service
-import org.springframework.web.reactive.function.server.ServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse
-import org.springframework.web.reactive.function.server.bodyAndAwait
-import org.springframework.web.reactive.function.server.bodyValueAndAwait
+import org.springframework.web.reactive.function.server.*
 
 @Component
 class AuthHandler(
@@ -19,7 +13,9 @@ class AuthHandler(
 ) {
 
     suspend fun signIn(request: ServerRequest): ServerResponse {
-        val account = accountService.getAccount(1)
+        val accountId = request.queryParamOrNull("id") ?: return ServerResponse.badRequest().bodyValueAndAwait("no query")
+
+        val account = accountService.getAccount(accountId.toLong())
         return when (account) {
             is Either.Left -> ServerResponse.badRequest().bodyValueAndAwait("not found account")
             is Either.Right -> ServerResponse.ok().bodyValueAndAwait(account)
