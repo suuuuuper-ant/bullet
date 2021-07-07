@@ -10,13 +10,14 @@ import java.util.function.Function
 import java.util.function.Predicate
 import java.util.stream.Collectors
 import io.jsonwebtoken.Claims
-
-
-
+import mu.KotlinLogging
+import java.util.*
 
 
 @Component
 class JwtAuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthenticationManager {
+    private val logger = KotlinLogging.logger {}
+
 //    override fun authenticate(authentication: Authentication): Mono<Authentication> {
 //        return Mono.just(authentication)
 //            .map { jwtSigner.validateJwt(it.credentials as String) }
@@ -38,12 +39,15 @@ class JwtAuthenticationManager(private val jwtUtil: JWTUtil) : ReactiveAuthentic
             .switchIfEmpty(Mono.empty())
             .map {
                 val claims = jwtUtil.getAllClaimsFromToken(authToken)
-                val rolesMap: List<String> = claims["role"] as List<String>
-                val username = jwtUtil.getUsernameFromToken(authToken)
+                val role: String = claims["role"] as String
+                val id = claims["id"] as String
+                val email = jwtUtil.getEmailFromToken(authToken)
+                logger.info { "authenticate $claims" }
                 UsernamePasswordAuthenticationToken(
-                    username,
-                    null,
-                    rolesMap.map { role -> SimpleGrantedAuthority(role) }
+                    id,
+//                    mapOf("email" to email, "id" to id),
+                    authToken,
+                    listOf(SimpleGrantedAuthority(role))
                 )
             }
     }

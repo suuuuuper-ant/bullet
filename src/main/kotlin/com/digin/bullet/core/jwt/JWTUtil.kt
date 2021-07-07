@@ -7,6 +7,7 @@ import java.security.Key
 import io.jsonwebtoken.Jwts
 
 import io.jsonwebtoken.Claims
+import mu.KotlinLogging
 import java.lang.Exception
 import java.security.SignatureException
 import java.util.*
@@ -14,6 +15,8 @@ import java.util.*
 
 @Component
 class JWTUtil {
+
+    private val logger = KotlinLogging.logger {}
 
     private val secret: String = "aasdfasdfasdfasdfasdfasdfasdfasdf"
 
@@ -33,7 +36,7 @@ class JWTUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
     }
 
-    fun getUsernameFromToken(token: String): String {
+    fun getEmailFromToken(token: String): String {
         return getAllClaimsFromToken(token).subject
     }
 
@@ -44,31 +47,36 @@ class JWTUtil {
     private fun isTokenMalformed(token: String): Boolean {
         return try {
             Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).body
-            true
-        } catch (e: SignatureException) {
-            println("custom error -> $e")
             false
+        } catch (e: SignatureException) {
+            logger.error { "custom error -> $e" }
+            true
         }
     }
 
     private fun isTokenExpired(token: String): Boolean {
         val expiration: Date = getExpirationDateFromToken(token)
-        return expiration.before(Date())
+        val isExpire = expiration.before(Date())
+        logger.info { "is Expire = $isExpire" }
+        return isExpire
     }
 
-    fun generateToken(signUpRequest: SignUpRequest): String {
-        val claims: MutableMap<String, List<String>> = HashMap()
-        claims["role"] = signUpRequest.roles
-        return doGenerateToken(claims, signUpRequest.name)
+    fun generateToken(id: Long, email: String, name: String, role: String = "USER"): String {
+        val claims = mapOf(
+            "id" to id.toString(),
+            "name" to name,
+            "role" to role
+        )
+        return doGenerateToken(claims, email)
     }
 
-    private fun doGenerateToken(claims: Map<String, List<String>>, username: String): String {
+    private fun doGenerateToken(claims: Map<String, String>, email: String): String {
         val expirationTimeLong = expirationTime.toLong() //in second
         val createdDate = Date()
         val expirationDate = Date(createdDate.time + expirationTimeLong * 1000)
         return Jwts.builder()
             .setClaims(claims)
-            .setSubject(username)
+            .setSubject(email)
             .setIssuedAt(createdDate)
             .setExpiration(expirationDate)
             .signWith(key)
@@ -77,10 +85,10 @@ class JWTUtil {
 
     fun validateToken(token: String): Boolean {
         return try {
-            val isExpired = !isTokenExpired(token)
+            val isExpired = isTokenExpired(token)
             val isMalformed = isTokenMalformed(token)
 
-            isExpired && isMalformed
+            !isExpired && !isMalformed
         } catch (e: Exception) {
             false
         }
