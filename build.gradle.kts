@@ -51,7 +51,7 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
 
     // swagger
-    implementation("org.springdoc.springdoc-openapi-webflux-ui:1.5.9")
+//    implementation("org.springdoc.springdoc-openapi-webflux-ui:1.5.9")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
