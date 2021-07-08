@@ -1,13 +1,11 @@
 package com.digin.bullet.account.domain.entity
 
-import com.fasterxml.jackson.annotation.JsonFormat
-import org.joda.time.DateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Table
-
 import java.time.LocalDateTime
+
 
 @Table("account")
 class Account(
@@ -17,9 +15,9 @@ class Account(
     var password: String,
     var role: String,
     @CreatedDate
-    val createdAt: DateTime = DateTime.now(),
+    val createdAt: LocalDateTime = LocalDateTime.now(),
     @LastModifiedDate
-    val updatedAt: DateTime = DateTime.now()
+    val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

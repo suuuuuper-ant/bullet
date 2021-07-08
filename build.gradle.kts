@@ -33,6 +33,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 //    implementation("io.jsonwebtoken:jjwt:0.9.1")
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.8")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda")
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")
     implementation("com.github.jasync-sql:jasync-r2dbc-mysql:1.1.6")
     implementation("io.arrow-kt:arrow-core:0.13.2")

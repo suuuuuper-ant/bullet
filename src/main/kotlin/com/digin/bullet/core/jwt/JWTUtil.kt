@@ -56,9 +56,7 @@ class JWTUtil {
 
     private fun isTokenExpired(token: String): Boolean {
         val expiration: Date = getExpirationDateFromToken(token)
-        val isExpire = expiration.before(Date())
-        logger.info { "is Expire = $isExpire" }
-        return isExpire
+        return expiration.before(Date())
     }
 
     fun generateToken(id: Long, email: String, name: String, role: String = "USER"): String {

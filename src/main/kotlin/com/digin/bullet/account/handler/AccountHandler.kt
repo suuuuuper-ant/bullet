@@ -1,9 +1,10 @@
 package com.digin.bullet.account.handler
 
 import arrow.core.Either
+import arrow.core.getOrElse
 import com.digin.bullet.account.model.http.response.AccountDTO
-import com.digin.bullet.account.model.http.response.AccountResponse
 import com.digin.bullet.account.model.http.response.ErrorResponse
+import com.digin.bullet.account.model.http.response.SuccessResponse
 import com.digin.bullet.account.service.AccountService
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
@@ -24,7 +25,20 @@ class AccountHandler(
                 .bodyValueAndAwait(account.mapLeft { ErrorResponse(result = it.name) })
             is Either.Right -> ServerResponse
                 .ok()
-                .bodyValueAndAwait(AccountResponse(result = AccountDTO(id = account.value.id!!, email = account.value.email)))
+                .bodyValueAndAwait(
+                    SuccessResponse(
+                        result = account
+                            .map { AccountDTO(
+                                id = it.id!!,
+                                email = it.email,
+                                name = it.name,
+                                favorites = listOf(),
+                                createdAt = it.createdAt
+                            ) }
+                            .getOrElse {}
+                    )
+                )
+
         }
     }
 }
