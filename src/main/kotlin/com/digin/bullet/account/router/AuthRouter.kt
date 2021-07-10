@@ -10,11 +10,10 @@ class AuthRouter(
     private val authHandler: AuthHandler,
 ) {
     @Bean
-    fun authRoute() =  coRouter {
+    fun authRoute() = coRouter {
         "/auth".nest {
             POST("/sign-up", authHandler::signUp)
             POST("/sign-in", authHandler::signIn)
         }
-
     }
 }

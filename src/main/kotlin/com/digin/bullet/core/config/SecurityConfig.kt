@@ -41,6 +41,7 @@ class SecurityConfig {
             .authenticationManager(jwtAuthenticationManager)
             .securityContextRepository(securityContextRepository)
             .authorizeExchange()
+                .pathMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/auth/**").permitAll()
                 .anyExchange().authenticated()

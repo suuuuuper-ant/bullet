@@ -6,6 +6,8 @@ plugins {
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.10"
     kotlin("plugin.spring") version "1.5.10"
+//    id("com.github.johnrengelman.processes") version "0.5.0"
+//    id("org.springdoc.openapi-gradle-plugin") version "1.3.0"
 }
 
 group = "com.digin"
@@ -51,7 +53,9 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.1")
 
     // swagger
-//    implementation("org.springdoc.springdoc-openapi-webflux-ui:1.5.9")
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.9")
+    implementation("org.springdoc:springdoc-openapi-webflux-core:1.5.9")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
 
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
