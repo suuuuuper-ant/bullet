@@ -3,10 +3,11 @@ package com.digin.bullet.account.router
 import com.digin.bullet.account.handler.AuthHandler
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.web.reactive.function.server.coRouter
+import org.springframework.web.reactive.function.server.*
+
 
 @Configuration
-class AuthRouter(
+class ApiRouter(
     private val authHandler: AuthHandler,
 ) {
     @Bean

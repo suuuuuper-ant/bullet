@@ -2,8 +2,6 @@ package com.digin.bullet.account.handler
 
 import arrow.core.Either
 import arrow.core.getOrElse
-import arrow.core.right
-import com.digin.bullet.account.model.dto.SignInDTO
 import com.digin.bullet.account.model.dto.SignUpDTO
 import com.digin.bullet.account.model.http.request.SignInRequest
 import com.digin.bullet.account.model.http.request.SignUpRequest
