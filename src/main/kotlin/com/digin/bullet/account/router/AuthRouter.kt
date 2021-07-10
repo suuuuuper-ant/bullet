@@ -7,12 +7,13 @@ import org.springframework.web.reactive.function.server.*
 
 
 @Configuration
-class ApiRouter(
+class AuthRouter(
     private val authHandler: AuthHandler,
 ) {
     @Bean
     fun authRoute() = coRouter {
         "/auth".nest {
+            GET("/dd", authHandler::temp)
             POST("/sign-up", authHandler::signUp)
             POST("/sign-in", authHandler::signIn)
         }

@@ -68,4 +68,16 @@ class AuthHandler(
                 )
         }
     }
+
+    suspend fun temp(request: ServerRequest): ServerResponse {
+        return ServerResponse.ok().bodyValueAndAwait(Person(
+            name = "dd",
+            age = 5
+        ))
+    }
+
+    data class Person(
+        val name: String,
+        val age: Int
+    )
 }

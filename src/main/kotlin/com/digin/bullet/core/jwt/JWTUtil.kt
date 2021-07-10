@@ -85,7 +85,7 @@ class JWTUtil {
         return try {
             val isExpired = isTokenExpired(token)
             val isMalformed = isTokenMalformed(token)
-
+            logger.info { "infoinfo $isExpired $isMalformed" }
             !isExpired && !isMalformed
         } catch (e: Exception) {
             false

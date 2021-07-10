@@ -1,13 +1,12 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-import org.jetbrains.kotlin.ir.backend.js.compile
 
 plugins {
     id("org.springframework.boot") version "2.5.0"
     id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.5.10"
     kotlin("plugin.spring") version "1.5.10"
-//    id("com.github.johnrengelman.processes") version "0.5.0"
-//    id("org.springdoc.openapi-gradle-plugin") version "1.3.0"
+    id("org.asciidoctor.convert") version "1.5.9.2"
+
 }
 
 group = "com.digin"
@@ -57,6 +56,14 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-webflux-core:1.5.9")
     implementation("org.springdoc:springdoc-openapi-kotlin:1.5.9")
 
+    // restdoc
+    compileOnly("org.projectlombok:lombok")
+    annotationProcessor("org.projectlombok:lombok")
+    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc") // mock
+    testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient") // webtestclient
+    asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
+    testImplementation("io.projectreactor:reactor-test")
+
     developmentOnly("org.springframework.boot:spring-boot-devtools")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("io.r2dbc:r2dbc-h2")
@@ -75,4 +82,31 @@ tasks.withType<KotlinCompile> {
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+val snippetsDir by extra { file("build/generated-snippets") }
+
+tasks {
+    test {
+        outputs.dir(snippetsDir)
+    }
+
+    asciidoctor {
+        inputs.dir(snippetsDir)
+        dependsOn(test)
+
+        doLast {
+            copy {
+                from("build/asciidoc/html5")
+                into("build/resources/main/static/docs")
+            }
+        }
+    }
+
+    bootJar {
+        dependsOn("asciidoctor")
+        from ("${asciidoctor.get().outputDir}/html5") {
+            into("src/docs/asciidoc")
+        }
+    }
 }
