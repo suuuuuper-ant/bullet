@@ -20,17 +20,8 @@ class CompanyRouter(
     fun route() = coRouter {
         "/companies".nest {
            accept(MediaType.APPLICATION_JSON).nest {
-               GET("/about") { companyHandler.getCompany() }
+               GET("/{stockCode}", companyHandler::getCompany)
            }
         }
     }
-
-//    @Bean
-//    fun companyRoute() = nest(path("/companies"),
-//        router {
-//            listOf(
-//                GET("/") { ServerResponse.ok().body(fromObject(arrayOf(1, 2, 3)))}
-//            )
-//        }
-//    )
 }
