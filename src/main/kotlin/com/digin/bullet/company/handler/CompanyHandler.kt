@@ -17,8 +17,7 @@ class CompanyHandler(
 
     suspend fun getCompany(serverRequest: ServerRequest): ServerResponse {
         val stockCode = serverRequest.pathVariable("stockCode")
-        val result = companyService.getCompanyByStockCode(stockCode)
-        return when (result) {
+        return when (val result = companyService.getCompanyByStockCode(stockCode)) {
             is Either.Left -> when(result.value) {
                 CompanyException.NOT_FOUND_COMPANY -> ServerResponse.badRequest().bodyValueAndAwait(ErrorResponse(result = result.value.name))
             }
