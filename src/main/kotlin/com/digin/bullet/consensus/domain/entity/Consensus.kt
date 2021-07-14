@@ -1,5 +1,6 @@
 package com.digin.bullet.consensus.domain.entity
 
+import com.digin.bullet.consensus.model.dto.ConsensusDTO
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
@@ -23,4 +24,12 @@ class Consensus(
     @LastModifiedDate
     val updatedAt: LocalDateTime
 ) {
+    fun toDTO(consensus: Consensus): ConsensusDTO {
+        return ConsensusDTO(
+            id = consensus.id!!,
+            stockCode = consensus.stockCode,
+            opinion = consensus.opinion,
+            price = consensus.price
+        )
+    }
 }

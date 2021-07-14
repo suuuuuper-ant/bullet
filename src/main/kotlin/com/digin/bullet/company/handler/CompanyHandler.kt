@@ -5,6 +5,7 @@ import com.digin.bullet.common.model.http.response.ErrorResponse
 import com.digin.bullet.common.model.http.response.SuccessResponse
 import com.digin.bullet.company.domain.entity.Company
 import com.digin.bullet.company.model.dto.CompanyDTO
+import com.digin.bullet.company.model.http.response.CompanyDetailResponse
 import com.digin.bullet.company.service.CompanyService
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
@@ -23,18 +24,9 @@ class CompanyHandler(
                 .badRequest()
                 .bodyValueAndAwait(ErrorResponse(result = result.getOrHandle { it.name }))
             is Either.Right -> {
-
-                val company = result.getOrElse {  } as Company
-                val companyDTO = CompanyDTO(
-                    id = company.id!!,
-                    stockCode = company.stockCode,
-                    shortName = company.shortName,
-                    imageUrl = company.imageUrl ?: "",
-                    likeCount = company.likeCount,
-                )
                 ServerResponse
                     .ok()
-                    .bodyValueAndAwait(SuccessResponse(result = companyDTO))
+                    .bodyValueAndAwait(SuccessResponse(result = result.getOrElse {  } as CompanyDetailResponse))
             }
 
         }
