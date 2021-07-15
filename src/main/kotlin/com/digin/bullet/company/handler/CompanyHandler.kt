@@ -23,12 +23,10 @@ class CompanyHandler(
             is Either.Left -> ServerResponse
                 .badRequest()
                 .bodyValueAndAwait(ErrorResponse(result = result.getOrHandle { it.name }))
-            is Either.Right -> {
+            is Either.Right ->
                 ServerResponse
                     .ok()
                     .bodyValueAndAwait(SuccessResponse(result = result.getOrElse {  } as CompanyDetailResponse))
-            }
-
         }
     }
 }
