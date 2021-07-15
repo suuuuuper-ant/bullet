@@ -3,8 +3,7 @@ package com.digin.bullet.company.handler
 import arrow.core.*
 import com.digin.bullet.common.model.http.response.ErrorResponse
 import com.digin.bullet.common.model.http.response.SuccessResponse
-import com.digin.bullet.company.domain.entity.Company
-import com.digin.bullet.company.model.dto.CompanyDTO
+import com.digin.bullet.common.util.getPageRequest
 import com.digin.bullet.company.model.http.response.CompanyDetailResponse
 import com.digin.bullet.company.service.CompanyService
 import mu.KotlinLogging

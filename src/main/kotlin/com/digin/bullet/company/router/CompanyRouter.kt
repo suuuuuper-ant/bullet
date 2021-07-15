@@ -17,7 +17,7 @@ class CompanyRouter(
 ) {
 
     @Bean
-    fun route() = coRouter {
+    fun companyRoute() = coRouter {
         "/companies".nest {
            accept(MediaType.APPLICATION_JSON).nest {
                GET("/{stockCode}", companyHandler::getCompany)
