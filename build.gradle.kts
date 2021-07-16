@@ -59,7 +59,7 @@ dependencies {
     // restdoc
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
-    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc") // mock
+//    testImplementation("org.springframework.restdocs:spring-restdocs-mockmvc") // mock
     testImplementation("org.springframework.restdocs:spring-restdocs-webtestclient") // webtestclient
     asciidoctor("org.springframework.restdocs:spring-restdocs-asciidoctor")
     testImplementation("io.projectreactor:reactor-test")

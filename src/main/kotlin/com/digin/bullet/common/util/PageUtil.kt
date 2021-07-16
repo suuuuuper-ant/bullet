@@ -15,3 +15,8 @@ fun getPageRequest(serverRequest: ServerRequest): PageRequest {
     }
     return PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "updatedAt"))
 }
+
+
+val defaultPageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "updatedAt"))
+
+

@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class AccountService(
-    val jwtUtil: JWTUtil,
-    val accountRepository: AccountRepository) {
+    private val jwtUtil: JWTUtil,
+    private val accountRepository: AccountRepository) {
 
     suspend fun signUp(signUpDTO: SignUpDTO): Either<AccountException, Account> {
         val account = accountRepository.findByEmail(signUpDTO.email)

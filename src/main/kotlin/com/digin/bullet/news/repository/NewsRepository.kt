@@ -7,6 +7,7 @@ import org.springframework.data.r2dbc.repository.R2dbcRepository
 
 interface NewsRepository : R2dbcRepository<News, Long> {
     fun findByStockCode(stockCode: String, pageable: Pageable): Flow<News>
+    fun findByStockCodeIn(stockCodes: List<String>, pageable: Pageable): Flow<News>
 
     suspend fun findNewsById(id: Long): News
 }
