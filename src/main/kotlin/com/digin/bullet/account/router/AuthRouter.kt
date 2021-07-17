@@ -13,9 +13,9 @@ class AuthRouter(
     @Bean
     fun authRoute() = coRouter {
         "/auth".nest {
-            GET("/dd", authHandler::temp)
             POST("/sign-up", authHandler::signUp)
             POST("/sign-in", authHandler::signIn)
+            GET("/sign-up/check/email", authHandler::checkDuplicateEmail)
         }
     }
 }

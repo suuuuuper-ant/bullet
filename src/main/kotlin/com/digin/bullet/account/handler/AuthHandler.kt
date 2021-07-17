@@ -7,6 +7,7 @@ import com.digin.bullet.account.model.http.request.SignInRequest
 import com.digin.bullet.account.model.http.request.SignUpRequest
 import com.digin.bullet.account.model.http.response.SignInResponse
 import com.digin.bullet.account.model.http.response.SignUpResponse
+import com.digin.bullet.account.model.http.response.SuccessResponse
 import com.digin.bullet.account.service.AccountService
 import com.digin.bullet.core.jwt.JWTUtil
 import org.springframework.stereotype.Component
@@ -69,15 +70,12 @@ class AuthHandler(
         }
     }
 
-    suspend fun temp(request: ServerRequest): ServerResponse {
-        return ServerResponse.ok().bodyValueAndAwait(Person(
-            name = "dd",
-            age = 5
-        ))
+    suspend fun checkDuplicateEmail(serverRequest: ServerRequest): ServerResponse {
+        val email = serverRequest.queryParamOrNull("email") ?: return ServerResponse.badRequest().bodyValueAndAwait("INPUT_EMPTY")
+        val account = accountService.getAccountByEmail(email)
+        return when (account) {
+            is Either.Left -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = true))
+            is Either.Right -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = false))
+        }
     }
-
-    data class Person(
-        val name: String,
-        val age: Int
-    )
 }
