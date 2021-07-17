@@ -2,21 +2,27 @@ package com.digin.bullet.company.service
 
 import arrow.core.Either
 import com.digin.bullet.common.util.defaultPageRequest
+import com.digin.bullet.company.domain.entity.CompanyFavorite
 import com.digin.bullet.company.model.dto.CompanyDTO
 import com.digin.bullet.company.model.exception.CompanyException
 import com.digin.bullet.company.model.http.response.CompanyDetailResponse
+import com.digin.bullet.company.repository.CompanyFavoriteRepository
 import com.digin.bullet.company.repository.CompanyRepository
 import com.digin.bullet.consensus.service.ConsensusService
 import com.digin.bullet.news.service.NewsService
 import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.reactive.awaitLast
+import kotlinx.coroutines.reactive.awaitSingle
 import mu.KotlinLogging
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CompanyService(
     private val companyRepository: CompanyRepository,
+    private val companyFavoriteRepository: CompanyFavoriteRepository,
     private val newsService: NewsService,
     private val consensusService: ConsensusService
 ) {
@@ -42,7 +48,6 @@ class CompanyService(
         )
     }
 
-
     suspend fun getCompaniesByName(name: String, pageable: Pageable): Either<CompanyException, List<CompanyDTO>> {
         val companies = companyRepository.getCompaniesByKrNameContaining(name = name, pageable = PageRequest.of(0, 5))
             .toList()
@@ -51,6 +56,35 @@ class CompanyService(
             return Either.Left(CompanyException.NOT_FOUND_COMPANY)
         }
         return Either.Right(companies)
+    }
+
+    suspend fun doFavoriteCompanyByStockCodes(accountId: Long, stockCodes: List<String>) {
+        val companies = companyRepository.getCompaniesByStockCodeIn(stockCodes)
+        val existsFavorites = companyFavoriteRepository.findAllByAccountIdAndCompanyIdInAndIsDeleted(
+            accountId = accountId,
+            companyIds = companies.map { it.id!! },
+            isDeleted = false
+        )
+        val ids = existsFavorites.map { it.id }.toSet()
+        val companyFavorites = companies
+            .filterNot { ids.contains(it.id) }
+            .map { CompanyFavorite(
+                companyId = it.id!!,
+                accountId = accountId,
+                isDeleted = false
+            ) }
+        log.info { "favorites $companyFavorites" }
+        companyFavoriteRepository.saveAll(companyFavorites).awaitLast()
+
+        val incLikeCountCompany = companies.map {
+            val count = it.likeCount ?: 0
+            it.likeCount = count.inc()
+            it
+        }
+
+
+        log.info { "inc $incLikeCountCompany" }
+        companyRepository.saveAll(incLikeCountCompany).awaitLast()
 
     }
 }

@@ -22,6 +22,7 @@ class CompanyRouter(
            accept(MediaType.APPLICATION_JSON).nest {
                GET("/search", companyHandler::searchCompaniesByName)
                GET("/{stockCode}", companyHandler::getCompany)
+               POST("/favorites", companyHandler::doFavorites)
            }
         }
     }
