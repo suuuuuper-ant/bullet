@@ -28,4 +28,13 @@ class CompanyHandler(
                     .bodyValueAndAwait(SuccessResponse(result = result.getOrElse {  } as CompanyDetailResponse))
         }
     }
+
+    suspend fun searchCompaniesByName(serverRequest: ServerRequest): ServerResponse {
+        val keyword = serverRequest.queryParamOrNull("keyword") ?: return ServerResponse.badRequest().bodyValueAndAwait("INPUT_EMPTY")
+        val companies = companyService.getCompaniesByName(name = keyword, pageable = getPageRequest(serverRequest))
+        return when(companies) {
+            is Either.Left -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = listOf("")))
+            is Either.Right -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = companies.getOrElse {  }))
+        }
+    }
 }

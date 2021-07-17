@@ -20,6 +20,7 @@ class CompanyRouter(
     fun companyRoute() = coRouter {
         "/companies".nest {
            accept(MediaType.APPLICATION_JSON).nest {
+               GET("/search", companyHandler::searchCompaniesByName)
                GET("/{stockCode}", companyHandler::getCompany)
            }
         }
