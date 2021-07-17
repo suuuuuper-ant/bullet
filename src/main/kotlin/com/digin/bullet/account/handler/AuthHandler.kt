@@ -74,8 +74,12 @@ class AuthHandler(
         val email = serverRequest.queryParamOrNull("email") ?: return ServerResponse.badRequest().bodyValueAndAwait("INPUT_EMPTY")
         val account = accountService.getAccountByEmail(email)
         return when (account) {
-            is Either.Left -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = true))
-            is Either.Right -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = false))
+            is Either.Left -> ServerResponse
+                .ok()
+                .bodyValueAndAwait(SuccessResponse(result = true))
+            is Either.Right -> ServerResponse
+                .ok()
+                .bodyValueAndAwait(SuccessResponse(result = false))
         }
     }
 }
