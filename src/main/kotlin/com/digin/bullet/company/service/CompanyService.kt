@@ -1,7 +1,6 @@
 package com.digin.bullet.company.service
 
 import arrow.core.Either
-import com.digin.bullet.common.util.defaultPageRequest
 import com.digin.bullet.company.domain.entity.CompanyFavorite
 import com.digin.bullet.company.model.dto.CompanyDTO
 import com.digin.bullet.company.model.exception.CompanyException
@@ -12,12 +11,10 @@ import com.digin.bullet.consensus.service.ConsensusService
 import com.digin.bullet.news.service.NewsService
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.awaitLast
-import kotlinx.coroutines.reactive.awaitSingle
 import mu.KotlinLogging
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
 
 @Service
 class CompanyService(
@@ -85,6 +82,27 @@ class CompanyService(
 
         log.info { "inc $incLikeCountCompany" }
         companyRepository.saveAll(incLikeCountCompany).awaitLast()
+
+    }
+
+    suspend fun cancelFavorites(accountId: Long, stockCodes: List<String>) {
+        val companies = companyRepository.getCompaniesByStockCodeIn(stockCodes = stockCodes)
+
+        val existsFavorites = companyFavoriteRepository.findAllByAccountIdAndCompanyIdInAndIsDeleted(
+            accountId = accountId,
+            companyIds = companies.map { it.id!! },
+            isDeleted = false
+        )
+        val ids = existsFavorites.map { it.id!! }.toSet()
+        val favorites = companyFavoriteRepository.findAllByIdIn(ids)
+
+        companyFavoriteRepository.saveAll(favorites.map {
+            it.isDeleted = true
+            it
+        })
+            .awaitLast()
+
+
 
     }
 }

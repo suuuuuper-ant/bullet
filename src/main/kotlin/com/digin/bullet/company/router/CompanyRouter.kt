@@ -23,6 +23,7 @@ class CompanyRouter(
                GET("/search", companyHandler::searchCompaniesByName)
                GET("/{stockCode}", companyHandler::getCompany)
                POST("/favorites", companyHandler::doFavorites)
+               DELETE("/favorites", companyHandler::cancelFavorites)
            }
         }
     }

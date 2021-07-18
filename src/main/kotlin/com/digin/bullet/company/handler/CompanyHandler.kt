@@ -48,6 +48,15 @@ class CompanyHandler(
 
         return ServerResponse.ok().buildAndAwait()
     }
+
+    suspend fun cancelFavorites(serverRequest: ServerRequest): ServerResponse {
+        val accountId = serverRequest.awaitPrincipal()!!.name.toLong()
+        val stockCodes = serverRequest.queryParamOrNull("stockCodes") ?: return ServerResponse.badRequest().bodyValueAndAwait(CompanyException.INPUT_EMPTY)
+
+        companyService.cancelFavorites(accountId, stockCodes.split(","))
+
+        return ServerResponse.ok().buildAndAwait()
+    }
     data class CompanyFavorites(
         val stockCodes: List<String>
     )

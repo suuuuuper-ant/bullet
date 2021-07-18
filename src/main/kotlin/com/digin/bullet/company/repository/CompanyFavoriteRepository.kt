@@ -7,4 +7,5 @@ interface CompanyFavoriteRepository : R2dbcRepository<CompanyFavorite, Long>{
     suspend fun findAllByAccountIdAndCompanyIdInAndIsDeleted(accountId: Long,
                                                            companyIds: List<Long>,
                                                            isDeleted: Boolean): List<CompanyFavorite>
+    suspend fun findAllByIdIn(ids: Set<Long>): List<CompanyFavorite>
 }
