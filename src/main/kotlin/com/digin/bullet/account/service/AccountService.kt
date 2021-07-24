@@ -59,6 +59,5 @@ class AccountService(
             ?: return Either.Left(AccountException.NOT_FOUND_ACCOUNT)
 
         return Either.Right(account)
-
     }
 }

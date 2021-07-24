@@ -27,4 +27,8 @@ class CompanyFavorite(
     @LastModifiedDate
     val updatedAt: LocalDateTime = LocalDateTime.now()
 ) {
+
+    override fun toString(): String {
+        return "CompanyFavorite(id=$id, companyId=$companyId, accountId=$accountId, isDeleted=$isDeleted, createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
 }

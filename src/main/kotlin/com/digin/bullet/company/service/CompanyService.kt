@@ -1,6 +1,7 @@
 package com.digin.bullet.company.service
 
 import arrow.core.Either
+import com.digin.bullet.common.util.defaultPageRequest
 import com.digin.bullet.company.domain.entity.CompanyFavorite
 import com.digin.bullet.company.model.dto.CompanyDTO
 import com.digin.bullet.company.model.exception.CompanyException
@@ -55,6 +56,11 @@ class CompanyService(
         return Either.Right(companies)
     }
 
+    suspend fun getCompaniesByIds(ids: List<Long>): Either.Right<List<CompanyDTO>> {
+        val companies = companyRepository.findCompaniesByIdIn(ids).map { it.toDTO(it) }
+        return Either.Right(companies)
+    }
+
     suspend fun doFavoriteCompanyByStockCodes(accountId: Long, stockCodes: List<String>) {
         val companies = companyRepository.getCompaniesByStockCodeIn(stockCodes)
         val existsFavorites = companyFavoriteRepository.findAllByAccountIdAndCompanyIdInAndIsDeleted(
@@ -65,11 +71,13 @@ class CompanyService(
         val ids = existsFavorites.map { it.id }.toSet()
         val companyFavorites = companies
             .filterNot { ids.contains(it.id) }
-            .map { CompanyFavorite(
-                companyId = it.id!!,
-                accountId = accountId,
-                isDeleted = false
-            ) }
+            .map {
+                CompanyFavorite(
+                    companyId = it.id!!,
+                    accountId = accountId,
+                    isDeleted = false
+                )
+            }
         log.info { "favorites $companyFavorites" }
         companyFavoriteRepository.saveAll(companyFavorites).awaitLast()
 
@@ -101,8 +109,10 @@ class CompanyService(
             it
         })
             .awaitLast()
+    }
 
-
-
+    suspend fun getFavoriteCompanies(accountId: Long): Either.Right<List<CompanyFavorite>> {
+        val favorites = companyFavoriteRepository.findAllByAccountIdAndIsDeleted(accountId = accountId, isDeleted = false, pageable = defaultPageRequest)
+        return Either.Right(favorites.toList())
     }
 }
