@@ -23,13 +23,18 @@ class HomeHandler(
         val accountId = serverRequest.awaitPrincipal()!!.name.toLong()
 
         val favorites = companyService.getFavoriteCompanies(accountId = accountId)
-        val favoriteIds = favorites.getOrElse { listOf() }.map { it.id ?: 0 }
+        val favoriteIds = favorites.getOrElse { listOf() }.map { it.companyId }
 
+        log.info { "favoriteIds : $favoriteIds"  }
         val companies = companyService.getCompaniesByIds(ids = favoriteIds).getOrElse { listOf() }
-        val newsList = newsService.searchNewsByStockCodes(companies.map { it.stockCode })
-        val consensuses = companies.map { it.stockCode }.map { consensusService.getConsensusByStockCode(it) }
+        val stockCodes = companies.map { it.stockCode }
+        val newsList = newsService.searchNewsByStockCodes(stockCodes = stockCodes)
+        val consensuses = consensusService.getConsensusByStockCodes(stockCodes = stockCodes)
 
-        log.info { "companies : $companies" }
-        return ServerResponse.ok().bodyValueAndAwait(companies)
+
+        log.info { "accountId: $accountId" }
+        log.info { "stockCodes : $stockCodes" }
+        log.info { "consensuses $consensuses" }
+        return ServerResponse.ok().bodyValueAndAwait(consensuses)
     }
 }

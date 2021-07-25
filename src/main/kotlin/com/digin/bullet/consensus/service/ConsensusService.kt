@@ -16,4 +16,8 @@ class ConsensusService(
         val pageable = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "createdAt"))
         return consensusRepository.findByStockCode(pageable, stockCode).toList()
     }
+
+    suspend fun getConsensusByStockCodes(stockCodes: List<String>): List<Consensus> {
+        return stockCodes.flatMap { getConsensusByStockCode(it) }
+    }
 }
