@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.digin.bullet.common.util.defaultPageRequest
 import com.digin.bullet.company.domain.entity.CompanyFavorite
 import com.digin.bullet.company.model.dto.CompanyDTO
+import com.digin.bullet.company.model.dto.CompanyFavoriteDTO
 import com.digin.bullet.company.model.exception.CompanyException
 import com.digin.bullet.company.model.http.response.CompanyDetailResponse
 import com.digin.bullet.company.repository.CompanyFavoriteRepository
@@ -111,8 +112,8 @@ class CompanyService(
             .awaitLast()
     }
 
-    suspend fun getFavoriteCompanies(accountId: Long): Either.Right<List<CompanyFavorite>> {
+    suspend fun getFavoriteCompanies(accountId: Long): Either.Right<List<CompanyFavoriteDTO>> {
         val favorites = companyFavoriteRepository.findAllByAccountIdAndIsDeleted(accountId = accountId, isDeleted = false, pageable = defaultPageRequest)
-        return Either.Right(favorites.toList())
+        return Either.Right(favorites.toList().map { it.toDTO(it) })
     }
 }

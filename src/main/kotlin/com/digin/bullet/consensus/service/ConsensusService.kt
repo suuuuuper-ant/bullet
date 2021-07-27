@@ -1,6 +1,7 @@
 package com.digin.bullet.consensus.service
 
 import com.digin.bullet.consensus.domain.entity.Consensus
+import com.digin.bullet.consensus.model.dto.ConsensusDTO
 import com.digin.bullet.consensus.repository.ConsensusRepository
 import kotlinx.coroutines.flow.toList
 import org.springframework.data.domain.PageRequest
@@ -17,7 +18,7 @@ class ConsensusService(
         return consensusRepository.findByStockCode(pageable, stockCode).toList()
     }
 
-    suspend fun getConsensusByStockCodes(stockCodes: List<String>): List<Consensus> {
-        return stockCodes.flatMap { getConsensusByStockCode(it) }
+    suspend fun getConsensusByStockCodes(stockCodes: List<String>): List<ConsensusDTO> {
+        return stockCodes.flatMap { getConsensusByStockCode(it) }.map { it.toDTO(it) }
     }
 }

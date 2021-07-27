@@ -1,11 +1,11 @@
 package com.digin.bullet.consensus.domain.entity
 
 import com.digin.bullet.consensus.model.dto.ConsensusDTO
+import org.joda.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
 import org.springframework.data.annotation.LastModifiedDate
 import org.springframework.data.relational.core.mapping.Table
-import java.time.LocalDateTime
 
 @Table("consensus")
 class Consensus(
@@ -29,7 +29,14 @@ class Consensus(
             id = consensus.id!!,
             stockCode = consensus.stockCode,
             opinion = consensus.opinion,
-            price = consensus.price
+            price = consensus.price,
+            createdAt = consensus.createdAt
         )
     }
+
+    override fun toString(): String {
+        return "Consensus(id=$id, stockCode='$stockCode', name='$name', title='$title', opinion='$opinion', price='$price', writer='$writer', source='$source', chart='$chart', createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
+
+
 }

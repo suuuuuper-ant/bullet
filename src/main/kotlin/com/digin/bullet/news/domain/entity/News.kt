@@ -27,7 +27,6 @@ class News(
             link = news.link,
             description = news.description,
             createdAt = news.createdAt,
-            updatedAt = news.updatedAt
         )
     }
 }

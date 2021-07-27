@@ -1,5 +1,6 @@
 package com.digin.bullet.company.domain.entity
 
+import com.digin.bullet.company.model.dto.CompanyFavoriteDTO
 import org.joda.time.LocalDateTime
 import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.annotation.Id
@@ -30,5 +31,14 @@ class CompanyFavorite(
 
     override fun toString(): String {
         return "CompanyFavorite(id=$id, companyId=$companyId, accountId=$accountId, isDeleted=$isDeleted, createdAt=$createdAt, updatedAt=$updatedAt)"
+    }
+
+    fun toDTO(companyFavorite: CompanyFavorite): CompanyFavoriteDTO {
+        return CompanyFavoriteDTO(
+            id = companyFavorite.id ?: 0,
+            companyId = companyFavorite.companyId,
+            accountId = companyFavorite.accountId,
+            updatedAt = companyFavorite.updatedAt
+        )
     }
 }

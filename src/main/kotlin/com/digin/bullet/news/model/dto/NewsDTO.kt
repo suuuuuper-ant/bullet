@@ -9,5 +9,5 @@ data class NewsDTO(
     val link: String,
     val description: String,
     val createdAt: LocalDateTime,
-    val updatedAt: LocalDateTime
+//    val updatedAt: LocalDateTime
 )

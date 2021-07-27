@@ -20,7 +20,7 @@ class JWTUtil {
 
     private val secret: String = "aasdfasdfasdfasdfasdfasdfasdfasdf"
 
-    private val expirationTime: String = "10000"
+    private val expirationTime: String = "1000000000"
 
     private val key: Key = Keys.hmacShaKeyFor(secret.toByteArray())
 
