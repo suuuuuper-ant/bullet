@@ -19,14 +19,14 @@ class CompanyHandler(
 
     suspend fun getCompany(serverRequest: ServerRequest): ServerResponse {
         val stockCode = serverRequest.pathVariable("stockCode")
-        return when (val result = companyService.getCompanyByStockCode(stockCode)) {
+        return when (val result = companyService.getCompanyDetailByStockCode(stockCode)) {
             is Either.Left -> ServerResponse
                 .badRequest()
                 .bodyValueAndAwait(ErrorResponse(result = result.getOrHandle { it.name }))
             is Either.Right ->
                 ServerResponse
                     .ok()
-                    .bodyValueAndAwait(SuccessResponse(result = result.getOrElse {  } as CompanyDetailResponse))
+                    .bodyValueAndAwait(SuccessResponse(result = result.getOrElse {  }))
         }
     }
 

@@ -16,6 +16,7 @@ class HomeRouter(
         "/home".nest {
             accept(MediaType.APPLICATION_JSON).nest {
                 GET("", homeHandler::getHome)
+                GET("/{stockCode}", homeHandler::getHomeByStockCode)
             }
         }
 

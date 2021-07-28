@@ -3,11 +3,15 @@ package com.digin.bullet.company.service
 import arrow.core.Either
 import com.digin.bullet.common.util.defaultPageRequest
 import com.digin.bullet.company.domain.entity.CompanyFavorite
+import com.digin.bullet.company.model.dto.CompanyAnnualDTO
 import com.digin.bullet.company.model.dto.CompanyDTO
 import com.digin.bullet.company.model.dto.CompanyFavoriteDTO
+import com.digin.bullet.company.model.dto.CompanyQuarterDTO
 import com.digin.bullet.company.model.exception.CompanyException
 import com.digin.bullet.company.model.http.response.CompanyDetailResponse
+import com.digin.bullet.company.repository.CompanyAnnualRepository
 import com.digin.bullet.company.repository.CompanyFavoriteRepository
+import com.digin.bullet.company.repository.CompanyQuarterRepository
 import com.digin.bullet.company.repository.CompanyRepository
 import com.digin.bullet.consensus.service.ConsensusService
 import com.digin.bullet.news.service.NewsService
@@ -22,13 +26,23 @@ import org.springframework.stereotype.Service
 class CompanyService(
     private val companyRepository: CompanyRepository,
     private val companyFavoriteRepository: CompanyFavoriteRepository,
+    private val companyAnnualRepository: CompanyAnnualRepository,
+    private val companyQuarterRepository: CompanyQuarterRepository,
     private val newsService: NewsService,
     private val consensusService: ConsensusService
 ) {
 
     private val log = KotlinLogging.logger {}
 
-    suspend fun getCompanyByStockCode(stockCode: String): Either<CompanyException, CompanyDetailResponse> {
+
+    suspend fun getCompanyByStockCode(stockCode: String): Either<CompanyException, CompanyDTO> {
+        val company = companyRepository.getCompanyByStockCode(stockCode) ?: return Either.Left(CompanyException.NOT_FOUND_COMPANY)
+        val companyDTO = company.toDTO(company)
+
+       return Either.Right(companyDTO)
+    }
+
+    suspend fun getCompanyDetailByStockCode(stockCode: String): Either<CompanyException, CompanyDetailResponse> {
         val company = companyRepository.getCompanyByStockCode(stockCode) ?: return Either.Left(CompanyException.NOT_FOUND_COMPANY)
         val companyDTO = company.toDTO(company)
 
@@ -115,5 +129,16 @@ class CompanyService(
     suspend fun getFavoriteCompanies(accountId: Long): Either.Right<List<CompanyFavoriteDTO>> {
         val favorites = companyFavoriteRepository.findAllByAccountIdAndIsDeleted(accountId = accountId, isDeleted = false, pageable = defaultPageRequest)
         return Either.Right(favorites.toList().map { it.toDTO(it) })
+    }
+
+
+    suspend fun getCompanyAnnuals(stockCode: String): Either.Right<List<CompanyAnnualDTO>> {
+        val annuals = companyAnnualRepository.findAllByStockCode(stockCode = stockCode).map { it.toDTO() }
+        return Either.Right(annuals)
+    }
+
+    suspend fun getCompanyQuarters(stockCode: String): Either.Right<List<CompanyQuarterDTO>> {
+        val quarters = companyQuarterRepository.findAllByStockCode(stockCode).map { it.toDTO() }
+        return Either.Right(quarters)
     }
 }
