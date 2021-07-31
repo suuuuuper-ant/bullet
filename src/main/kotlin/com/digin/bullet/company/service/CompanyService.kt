@@ -97,7 +97,7 @@ class CompanyService(
         companyFavoriteRepository.saveAll(companyFavorites).awaitLast()
 
         val incLikeCountCompany = companies.map {
-            val count = it.likeCount ?: 0
+            val count = it.likeCount
             it.likeCount = count.inc()
             it
         }
