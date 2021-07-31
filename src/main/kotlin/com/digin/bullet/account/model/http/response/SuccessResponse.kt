@@ -1,6 +1,7 @@
 package com.digin.bullet.account.model.http.response
 
-import java.time.LocalDateTime
+import org.joda.time.LocalDateTime
+
 
 data class SuccessResponse<T>(
     val status: String = "success",
