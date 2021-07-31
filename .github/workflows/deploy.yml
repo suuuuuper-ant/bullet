@@ -1,0 +1,66 @@
+# 언제 액션이 이루어질 지 정할 수 있다. 아래에 브랜치를 지정해주면 된다.
+# 우리는 develop 브랜치에 Push되면 자동 배포하도록 정의할 것이다.
+on:
+  push:
+    branches:
+      - develop
+
+# 액션의 이름
+name: Deploy String boot to Amazon EC2
+env:
+  PROJECT_NAME: action_codedeploy
+
+# 아래의 Job들이 깃헙 액션에서 진행된다.
+jobs:
+  # 하나의 job을 정의
+  deploy:
+    # job의 이름
+    name: DEPLOY
+    # 빌드가 어느 운영체제에서 돌아가는지
+    runs-on: ubuntu-20.04
+
+    # step은 job의 하위 집합. step에서 정의한 작업을 순차적으로 진행한다.
+    steps:
+      # 위에서 정의한 브랜치로 체크아웃
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      # 자바 버전 설정
+      - name: Set up JDK 11
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+
+      # GradleWrapper에 실행 권한을 부여. java나 gradle을 설치하지 않고 바로 빌드할 수 있게 해주는 역할
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+        shell: bash
+
+      # Gradle Wrapper를 활용해 빌드. build.gradle
+      - name: Build with Gradle
+        run: ./gradlew  build
+        shell: bash
+
+      # 버전마다 이름을 다르게 하기 위해서 GITHUB_SHA(github action에서 제공하는 기본 환경변수) 라고 하는 해시이름을 활용하여 zip 파일을 만든다.
+      # CodeDeploy를 사용하기 위해서는 S3를 거쳐야하므로, 우선 압축된 파일로 만들어주고 추후 이를 옮겨야 한다.
+      - name: Make zip file
+        run: zip -qq -r ./$GITHUB_SHA.zip .
+        shell: bash
+
+      # AWS 서비스를 사용(s3 업로드)하기 위한 인증 과정 (aws cli credentials)
+      # 오픈되면 안되는 정보들은 repository Setting->Secrets 에서 key, value로 저장 후 deploy 할 때 $로 사용가능
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      # 배포 zip 파일을 S3에 업로드
+      - name: Upload to S3
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.zip s3://manham-digin/$PROJECT_NAME/$GITHUB_SHA.zip
+
+      # 실제로 코드 배포.
+      # manham-digin s3 에 있는 파일을 digin Code Deploy 어플리케이션이 develop 배포그룹(ec2)에 배포
+      - name: Code Deploy
+        run: aws deploy create-deployment --application-name digin --deployment-config-name CodeDeployDefault.OneAtATime --deployment-group-name dev-digin --s3-location bucket=manham-digin,bundleType=zip,key=$PROJECT_NAME/$GITHUB_SHA.zip

@@ -1,0 +1,33 @@
+spring:
+  profiles:
+    active: local
+
+bullet:
+  database:
+    connectionTimeout: 3000
+    maxConnection: 5
+
+logging:
+  level:
+    root: info
+
+
+---
+spring:
+  profiles:
+    active: local
+
+---
+spring:
+  profiles:
+    active: dev
+
+---
+spring:
+  profiles:
+    active: stage
+
+---
+spring:
+  profiles:
+    active: live
