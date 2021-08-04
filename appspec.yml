@@ -13,6 +13,10 @@ permissions:
     group: ubuntu
     mode: 755
 hooks:
+  BeforeInstall:
+    - location: before-deploy.sh
+      timeout: 60
+      runas: ubuntu
   AfterInstall:
     # location은 프로젝트의 root경로를 기준
     - location: deploy.sh
