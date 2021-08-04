@@ -7,5 +7,6 @@ data class ConsensusDTO(
     val stockCode: String,
     val opinion: String,
     val price: String,
+    val chart: String,
     val createdAt: LocalDateTime
 )

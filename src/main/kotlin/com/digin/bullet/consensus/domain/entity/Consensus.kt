@@ -30,6 +30,7 @@ class Consensus(
             stockCode = consensus.stockCode,
             opinion = consensus.opinion,
             price = consensus.price,
+            chart = "http://http://consensus.hankyung.com/${consensus.chart}",
             createdAt = consensus.createdAt
         )
     }
