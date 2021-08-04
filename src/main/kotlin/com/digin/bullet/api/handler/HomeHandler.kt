@@ -33,7 +33,7 @@ class HomeHandler(
 
         val companies = companyService.getCompaniesByIds(ids = favoriteIds).getOrElse { listOf() }
         val stockCodes = companies.map { it.stockCode }
-        val newsList = newsService.searchNewsByStockCodes(stockCodes = stockCodes)
+        val newsList = newsService.getNewsByStockCodes(stockCodes = stockCodes)
         val consensuses = consensusService.getConsensusByStockCodes(stockCodes = stockCodes)
 
         val companyByStockCode = companies.groupBy { it.stockCode }

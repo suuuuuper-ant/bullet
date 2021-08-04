@@ -27,9 +27,16 @@ class NewsService(
         return newsRepository.findByStockCode(stockCode, pageable).toList()
     }
 
+    suspend fun getNewsByStockCodes(stockCodes: List<String>): List<NewsDTO> {
+        return stockCodes.flatMap { getNewsByStockCode(it) }.map { it.toDTO(it) }
+    }
+
     suspend fun searchNewsByStockCodes(stockCodes: List<String>, pageable: Pageable = defaultPageRequest): List<NewsDTO> {
-        return newsRepository.findByStockCodeIn(stockCodes, pageable)
+        val pageRequest = PageRequest.of(0, 20, Sort.by(Sort.Direction.ASC, "updatedAt"))
+        return newsRepository.findByStockCodeIn(stockCodes, pageRequest)
             .toList()
-            .map { it.toDTO(it) }
+            .map {
+                it.toDTO(it)
+            }
     }
 }
