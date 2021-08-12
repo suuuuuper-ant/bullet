@@ -43,9 +43,8 @@ class CompanyService(
        return Either.Right(companyDTO)
     }
 
-    @Cacheable("company")
+    @Cacheable(cacheNames = ["company"])
     suspend fun getCompanyDetailByStockCode(stockCode: String): Either<CompanyException, CompanyDetailResponse> {
-        log.info { "#mhmh" }
         val company = companyRepository.getCompanyByStockCode(stockCode) ?: return Either.Left(CompanyException.NOT_FOUND_COMPANY)
         val companyDTO = company.toDTO(company)
 

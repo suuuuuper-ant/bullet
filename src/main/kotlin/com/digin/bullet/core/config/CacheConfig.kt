@@ -9,10 +9,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.io.ClassPathResource
 import org.springframework.kotlin.coroutine.EnableCoroutine
+import org.springframework.scheduling.annotation.EnableScheduling
 
 @Configuration
 @EnableCaching
 @EnableCoroutine
+@EnableScheduling
 class CacheConfig {
 
     @Bean
