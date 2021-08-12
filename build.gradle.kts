@@ -30,6 +30,17 @@ dependencies {
     implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    // spring kotlin - coroutine
+    implementation("org.springframework.kotlin:spring-kotlin-coroutine:0.3.7")
+
+    // cache
+    implementation("org.springframework.boot:spring-boot-starter-cache")
+//    implementation("org.ehcache:ehcache:3.8.0")
+    implementation("net.sf.ehcache:ehcache:2.10.4")
+    implementation("javax.cache:cache-api:1.0.0") // expiry 기능을 위해 필요
+
+
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
     // logger
     implementation("io.github.microutils:kotlin-logging-jvm:2.0.8")

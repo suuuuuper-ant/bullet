@@ -18,6 +18,7 @@ import com.digin.bullet.news.service.NewsService
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.reactive.awaitLast
 import mu.KotlinLogging
+import org.springframework.cache.annotation.Cacheable
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -42,7 +43,9 @@ class CompanyService(
        return Either.Right(companyDTO)
     }
 
+    @Cacheable("company")
     suspend fun getCompanyDetailByStockCode(stockCode: String): Either<CompanyException, CompanyDetailResponse> {
+        log.info { "#mhmh" }
         val company = companyRepository.getCompanyByStockCode(stockCode) ?: return Either.Left(CompanyException.NOT_FOUND_COMPANY)
         val companyDTO = company.toDTO(company)
 

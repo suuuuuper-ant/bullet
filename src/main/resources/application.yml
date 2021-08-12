@@ -1,6 +1,9 @@
 spring:
   profiles:
     active: local
+  cache:
+    ehcache:
+      config: classpath:ehcache.xml
 
 bullet:
   database:
@@ -10,6 +13,7 @@ bullet:
 logging:
   level:
     root: info
+
 
 
 ---
