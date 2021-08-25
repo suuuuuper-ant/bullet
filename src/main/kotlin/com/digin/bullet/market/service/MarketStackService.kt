@@ -12,10 +12,9 @@ class MarketStackService(
 ) {
 
     suspend fun getMarketStackByStockCode(stockCode: String, pageable: Pageable): List<MarketStackDTO> {
-        val marketStacks = marketStackRepository.findAllByStockCode(stockCode)
+        val marketStacks = marketStackRepository.findAllByStockCode(stockCode, pageable)
             .toList()
             .map { it.toDTO() }
-
         return marketStacks
     }
 }
