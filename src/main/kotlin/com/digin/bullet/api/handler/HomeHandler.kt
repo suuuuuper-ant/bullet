@@ -85,35 +85,27 @@ class HomeHandler(
 //                )
         val companyGroupContents = stockCodes.map {
             GroupContent(
-                    type = GroupType.TYPE,
-                    items = listOf(
-                            GroupItem(
-                                    company = companyByStockCode.getOrDefault(it, listOf()).first(),
-                                    consensusList = consensusByStockCode.getOrDefault(it, listOf()),
-                                    newsList = newsByStockCode.getOrDefault(it, listOf())
-                            )
-                    )
+                    company = companyByStockCode.getOrDefault(it, listOf()).first(),
+                    consensusList = consensusByStockCode.getOrDefault(it, listOf()),
+                    newsList = newsByStockCode.getOrDefault(it, listOf())
             )
         }
 
         val favoritesGroupContents = companies.map {
             GroupContent(
-                    type = GroupType.TYPE,
-                    items = listOf(GroupItem(
-                            company = it,
-                    ))
+                    company = it,
             )
         }
 
         val companySlideGroup = Group(
-                section = GroupSection.COMPANY,
-                header = GroupHeader.SLIDE,
+                type = GroupType.COMPANY,
+                action = GroupAction.SLIDE,
                 contents = companyGroupContents
         )
 
         val favoritesListGroup = Group(
-                section = GroupSection.FAVORITES,
-                header = GroupHeader.LIST,
+                type = GroupType.FAVORITES,
+                action = GroupAction.LIST,
                 contents = favoritesGroupContents
         )
 
