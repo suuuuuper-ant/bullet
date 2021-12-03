@@ -41,6 +41,48 @@ class HomeHandler(
         val consensusByStockCode = consensuses.groupBy { it.stockCode }
 
 
+//        val companyGroupContents = stockCodes.map {
+//            GroupContent(
+//                    type = GroupType.TYPE,
+//                    items = listOf(
+//                            GroupItem(
+//                                    company = companyByStockCode.getOrDefault(it, listOf()).first(),
+//                                    consensusList = consensusByStockCode.getOrDefault(it, listOf()),
+//                                    newsList = newsByStockCode.getOrDefault(it, listOf())
+//                            )
+//                    )
+//            )
+//        }
+//
+//        val favoritesGroupContents = companies.map {
+//            GroupContent(
+//                    type = GroupType.TYPE,
+//                    items = listOf(GroupItem(
+//                            company = it,
+//                    ))
+//            )
+//        }
+//
+//        val companySlideGroup = Group(
+//                section = GroupSection.COMPANY,
+//                header = GroupHeader.SLIDE,
+//                contents = companyGroupContents
+//        )
+//
+//        val favoritesListGroup = Group(
+//                section = GroupSection.FAVORITES,
+//                header = GroupHeader.LIST,
+//                contents = favoritesGroupContents
+//        )
+//
+//        return ServerResponse.ok()
+//                .bodyValueAndAwait(
+//                        SuccessResponse(
+//                                result = HomeResponse(
+//                                        groups = listOf(companySlideGroup, favoritesListGroup)
+//                                )
+//                        )
+//                )
         val companyGroupContents = stockCodes.map {
             GroupContent(
                     type = GroupType.TYPE,

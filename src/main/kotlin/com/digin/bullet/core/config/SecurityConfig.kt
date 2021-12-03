@@ -42,6 +42,7 @@ class SecurityConfig {
             .securityContextRepository(securityContextRepository)
             .authorizeExchange()
                 .pathMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**", "/webjars/**").permitAll()
+                .pathMatchers("/companies/simple").permitAll()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/docs/**").permitAll()
                 .pathMatchers("/auth/**").permitAll()
