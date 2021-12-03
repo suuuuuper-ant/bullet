@@ -146,7 +146,8 @@ class CompanyService(
     }
 
     suspend fun getKospi200(): Either.Right<List<CompanyDTO>> {
-        val companies = companyRepository.findCompaniesByIsKospi200(true)
-        return Either.Right(companies.filter { it.imageUrl != null }.map { it.toDTO()}.shuffled())
+        val kospiTop30 = listOf("005930", "000660", "051910", "207940", "035420", "035720", "005380", "006400", "068270", "000270", "005490", "012330", "028260", "096770", "066570", "105560", "051900", "017670", "003550", "055550", "034730", "036570", "032830", "090430", "011200", "015760", "018260", "086790", "009150", "251270")
+        val companies = companyRepository.findCompaniesByStockCodeIn(kospiTop30)
+        return Either.Right(companies.map { it.toDTO()}.shuffled())
     }
 }
