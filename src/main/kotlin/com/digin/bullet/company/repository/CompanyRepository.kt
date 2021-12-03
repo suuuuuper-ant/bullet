@@ -19,4 +19,6 @@ interface CompanyRepository: R2dbcRepository<Company, Long> {
     fun findCompaniesByKrNameContaining(name: String, pageable: Pageable): Flow<Company>
 
     suspend fun findCompaniesByIdIn(ids: List<Long>): List<Company>
+
+    suspend fun findCompaniesByIsKospi200(isKospi200: Boolean): List<Company>
 }

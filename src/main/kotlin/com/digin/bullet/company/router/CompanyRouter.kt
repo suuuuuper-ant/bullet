@@ -20,6 +20,7 @@ class CompanyRouter(
     fun companyRoute() = coRouter {
         "/companies".nest {
            accept(MediaType.APPLICATION_JSON).nest {
+               GET("/simple", companyHandler::getSimples)
                GET("/search", companyHandler::searchCompaniesByName)
                GET("/{stockCode}", companyHandler::getCompany)
                POST("/favorites", companyHandler::doFavorites)
