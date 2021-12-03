@@ -2,6 +2,7 @@ package com.digin.bullet.company.service
 
 import arrow.core.Either
 import com.digin.bullet.common.util.defaultPageRequest
+import com.digin.bullet.company.domain.entity.Company
 import com.digin.bullet.company.domain.entity.CompanyFavorite
 import com.digin.bullet.company.model.dto.CompanyAnnualDTO
 import com.digin.bullet.company.model.dto.CompanyDTO
@@ -142,5 +143,10 @@ class CompanyService(
     suspend fun getCompanyQuarters(stockCode: String): Either.Right<List<CompanyQuarterDTO>> {
         val quarters = companyQuarterRepository.findAllByStockCode(stockCode).map { it.toDTO() }
         return Either.Right(quarters)
+    }
+
+    suspend fun getKospi200(): Either.Right<List<CompanyDTO>> {
+        val companies = companyRepository.findCompaniesByIsKospi200(true)
+        return Either.Right(companies.filter { it.imageUrl != null }.map { it.toDTO()}.shuffled())
     }
 }
