@@ -17,11 +17,11 @@ import org.springframework.web.reactive.function.server.*
 
 @Component
 class HomeHandler(
-    private val accountService: AccountService,
-    private val companyService: CompanyService,
-    private val newsService: NewsService,
-    private val consensusService: ConsensusService,
-    private val marketStackService: MarketStackService
+        private val accountService: AccountService,
+        private val companyService: CompanyService,
+        private val newsService: NewsService,
+        private val consensusService: ConsensusService,
+        private val marketStackService: MarketStackService
 ) {
     private val log = KotlinLogging.logger {}
 
@@ -40,47 +40,57 @@ class HomeHandler(
         val newsByStockCode = newsList.groupBy { it.stockCode }
         val consensusByStockCode = consensuses.groupBy { it.stockCode }
 
+
         val companyGroupContents = stockCodes.map {
             GroupContent(
-                company = companyByStockCode.getOrDefault(it, listOf()).first(),
-                consensusList = consensusByStockCode.getOrDefault(it, listOf()),
-                newsList = newsByStockCode.getOrDefault(it, listOf())
+                    type = GroupType.TYPE,
+                    items = listOf(
+                            GroupItem(
+                                    company = companyByStockCode.getOrDefault(it, listOf()).first(),
+                                    consensusList = consensusByStockCode.getOrDefault(it, listOf()),
+                                    newsList = newsByStockCode.getOrDefault(it, listOf())
+                            )
+                    )
             )
         }
 
         val favoritesGroupContents = companies.map {
             GroupContent(
-                company = it,
+                    type = GroupType.TYPE,
+                    items = listOf(GroupItem(
+                            company = it,
+                    ))
             )
         }
 
         val companySlideGroup = Group(
-            type = GroupType.COMPANY,
-            action = GroupAction.SLIDE,
-            contents = companyGroupContents
+                section = GroupSection.COMPANY,
+                header = GroupHeader.SLIDE,
+                contents = companyGroupContents
         )
 
         val favoritesListGroup = Group(
-            type = GroupType.FAVORITES,
-            action = GroupAction.LIST,
-            contents = favoritesGroupContents
+                section = GroupSection.FAVORITES,
+                header = GroupHeader.LIST,
+                contents = favoritesGroupContents
         )
 
         return ServerResponse.ok()
-            .bodyValueAndAwait(
-                SuccessResponse(
-                    result = HomeResponse(
-                        groups = listOf(companySlideGroup, favoritesListGroup)
-                    )
+                .bodyValueAndAwait(
+                        SuccessResponse(
+                                result = HomeResponse(
+                                        groups = listOf(companySlideGroup, favoritesListGroup)
+                                )
+                        )
                 )
-            )
     }
 
 
     suspend fun getHomeByStockCode(serverRequest: ServerRequest): ServerResponse {
         val stockCode = serverRequest.pathVariable("stockCode")
         val pageRequest = getPageRequest(serverRequest)
-        val company = companyService.getCompanyByStockCode(stockCode).getOrElse{ null } ?: return ServerResponse.badRequest().bodyValueAndAwait(CompanyException.NOT_FOUND_COMPANY)
+        val company = companyService.getCompanyByStockCode(stockCode).getOrElse { null }
+                ?: return ServerResponse.badRequest().bodyValueAndAwait(CompanyException.NOT_FOUND_COMPANY)
         val consensus = consensusService.getConsensusByStockCodes(listOf(stockCode))
         val newsList = newsService.getNewsByStockCode(stockCode).map { it.toDTO(it) }
         val annuals = companyService.getCompanyAnnuals(stockCode).getOrElse { listOf() }
@@ -88,16 +98,16 @@ class HomeHandler(
         val marketStacks = marketStackService.getMarketStackByStockCode(stockCode = stockCode, pageable = pageRequest)
 
         return ServerResponse.ok().bodyValueAndAwait(
-            SuccessResponse(
-                result =  HomeDetailResponse(
-                    company = company,
-                    consensusList = consensus,
-                    newsList = newsList,
-                    stacks = marketStacks,
-                    annuals = annuals,
-                    quarters = quarters
+                SuccessResponse(
+                        result = HomeDetailResponse(
+                                company = company,
+                                consensusList = consensus,
+                                newsList = newsList,
+                                stacks = marketStacks,
+                                annuals = annuals,
+                                quarters = quarters
+                        )
                 )
-            )
         )
     }
 }

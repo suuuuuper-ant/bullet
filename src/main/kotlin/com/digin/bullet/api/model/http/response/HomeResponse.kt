@@ -12,25 +12,34 @@ data class HomeResponse(
 
 
 data class Group(
-    val type: GroupType,
-    val action: GroupAction,
+    val section: GroupSection,
+    val header: GroupHeader,
     val contents: List<GroupContent>
 )
 
 // TODO meta typeㅇㅣ 아닌 뷰 타입으로 변경
-enum class GroupType {
+enum class GroupSection {
     COMPANY, FAVORITES
 }
 
-enum class GroupAction {
+enum class GroupHeader {
     SLIDE, LIST
 }
 
+enum class GroupType {
+    TYPE
+}
 
 data class GroupContent(
-    val company: CompanyDTO,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val consensusList: List<ConsensusDTO>? = null,
-    @JsonInclude(JsonInclude.Include.NON_NULL)
-    val newsList: List<NewsDTO>? = null
+    val type: GroupType,
+    val items: List<GroupItem>
+)
+
+
+data class GroupItem(
+        val company: CompanyDTO,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val consensusList: List<ConsensusDTO>? = null,
+        @JsonInclude(JsonInclude.Include.NON_NULL)
+        val newsList: List<NewsDTO>? = null
 )
