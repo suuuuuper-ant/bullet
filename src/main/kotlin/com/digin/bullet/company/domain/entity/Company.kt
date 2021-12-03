@@ -31,4 +31,13 @@ class Company(
             likeCount = company.likeCount,
         )
     }
+
+    fun toDTO(): CompanyDTO {
+        return CompanyDTO(
+                id = id!!,
+                stockCode = stockCode,
+                shortName = shortName,
+                imageUrl = imageUrl ?: ""
+        )
+    }
 }

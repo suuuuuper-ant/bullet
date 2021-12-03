@@ -17,6 +17,15 @@ class CompanyHandler(
 ) {
     private val log = KotlinLogging.logger {}
 
+    suspend fun getSimples(serverRequest: ServerRequest): ServerResponse {
+        val result = companyService.getKospi200()
+        return when (result) {
+            else -> ServerResponse
+                    .ok()
+                    .bodyValueAndAwait(SuccessResponse(result = result.getOrElse { listOf() }))
+        }
+    }
+
     suspend fun getCompany(serverRequest: ServerRequest): ServerResponse {
         val stockCode = serverRequest.pathVariable("stockCode")
         return when (val result = companyService.getCompanyDetailByStockCode(stockCode)) {
