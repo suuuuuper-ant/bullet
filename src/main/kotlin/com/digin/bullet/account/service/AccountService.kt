@@ -12,6 +12,7 @@ import com.digin.bullet.company.service.CompanyService
 import com.digin.bullet.core.jwt.JWTUtil
 import com.digin.bullet.core.utils.passwordEncode
 import com.digin.bullet.core.utils.passwordMatch
+import kotlinx.coroutines.reactive.awaitLast
 import kotlinx.coroutines.reactor.awaitSingleOrNull
 import org.springframework.stereotype.Service
 
@@ -55,6 +56,7 @@ class AccountService(
                             isDeleted = false,
                     )
                 })
+                .awaitLast()
 
         return Either.Right(created)
     }

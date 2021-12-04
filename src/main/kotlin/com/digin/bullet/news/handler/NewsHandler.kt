@@ -6,6 +6,7 @@ import arrow.core.getOrHandle
 import com.digin.bullet.common.model.http.response.ErrorResponse
 import com.digin.bullet.common.model.http.response.SuccessResponse
 import com.digin.bullet.common.util.getPageRequest
+import com.digin.bullet.common.util.getPageRequestWithoutSort
 import com.digin.bullet.company.service.CompanyService
 import com.digin.bullet.news.service.NewsService
 import io.swagger.v3.oas.models.servers.Server
@@ -47,7 +48,7 @@ class NewsHandler(
 
     suspend fun getNewsByStockCode(serverRequest: ServerRequest): ServerResponse {
         val stockCode = serverRequest.pathVariable("stockCode")
-        val pageRequest = getPageRequest(serverRequest)
+        val pageRequest = getPageRequestWithoutSort(serverRequest)
         val newsList = newsService.getNewsByStockCode(stockCode = stockCode, pageable = pageRequest)
 
         return ServerResponse.ok().bodyValueAndAwait(SuccessResponse(
