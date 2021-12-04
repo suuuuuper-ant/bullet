@@ -10,6 +10,7 @@ import com.digin.bullet.news.model.dto.NewsDTO
 import com.digin.bullet.news.repository.NewsRepository
 import kotlinx.coroutines.flow.*
 import mu.KotlinLogging
+import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -22,6 +23,9 @@ class NewsService(
 
     private val log = KotlinLogging.logger {}
 
+    suspend fun getNews(pageable: Pageable = defaultPageRequest): List<NewsDTO> {
+        return newsRepository.findAllByOrderByUpdatedAtDesc(pageable).toList().map { it.toDTO() }
+    }
 
     suspend fun getNewsByStockCode(stockCode: String, pageable: Pageable = defaultPageRequest): List<News> {
         return newsRepository.findByStockCode(stockCode, pageable).toList()

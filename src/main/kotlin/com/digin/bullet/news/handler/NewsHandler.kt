@@ -8,6 +8,7 @@ import com.digin.bullet.common.model.http.response.SuccessResponse
 import com.digin.bullet.common.util.getPageRequest
 import com.digin.bullet.company.service.CompanyService
 import com.digin.bullet.news.service.NewsService
+import io.swagger.v3.oas.models.servers.Server
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.server.*
@@ -19,6 +20,16 @@ class NewsHandler(
 ) {
 
     private val log = KotlinLogging.logger {}
+
+    suspend fun getNews(serverRequest: ServerRequest): ServerResponse {
+        val pageRequest = getPageRequest(serverRequest)
+
+        return ServerResponse.ok().bodyValueAndAwait(
+                SuccessResponse(
+                        result = newsService.getNews(pageable = pageRequest)
+                )
+        )
+    }
 
     suspend fun searchNewsByCompanyName(serverRequest: ServerRequest): ServerResponse {
         val pageRequest = getPageRequest(serverRequest)
@@ -40,7 +51,7 @@ class NewsHandler(
         val newsList = newsService.getNewsByStockCode(stockCode = stockCode, pageable = pageRequest)
 
         return ServerResponse.ok().bodyValueAndAwait(SuccessResponse(
-            result = newsList.map { it.toDTO(it) }
+            result = newsList.map { it }
         ))
     }
 }
