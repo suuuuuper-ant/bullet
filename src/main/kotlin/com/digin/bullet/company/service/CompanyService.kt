@@ -50,7 +50,7 @@ class CompanyService(
         val companyDTO = company.toDTO(company)
 
         val newsList = newsService.getNewsByStockCode(stockCode)
-        val newsDTOs = newsList.map { it.toDTO(it) }
+        val newsDTOs = newsList.map { it.toDTO() }
 
         val consensusList = consensusService.getConsensusByStockCode(stockCode)
         val consensusDTOs = consensusList.map { it.toDTO(it) }

@@ -126,7 +126,7 @@ class HomeHandler(
         val company = companyService.getCompanyByStockCode(stockCode).getOrElse { null }
                 ?: return ServerResponse.badRequest().bodyValueAndAwait(CompanyException.NOT_FOUND_COMPANY)
         val consensus = consensusService.getConsensusByStockCodes(listOf(stockCode))
-        val newsList = newsService.getNewsByStockCode(stockCode).map { it.toDTO(it) }
+        val newsList = newsService.getNewsByStockCode(stockCode).map { it.toDTO() }
         val annuals = companyService.getCompanyAnnuals(stockCode).getOrElse { listOf() }
         val quarters = companyService.getCompanyQuarters(stockCode).getOrElse { listOf() }
         val marketStacks = marketStackService.getMarketStackByStockCode(stockCode = stockCode, pageable = pageRequest)

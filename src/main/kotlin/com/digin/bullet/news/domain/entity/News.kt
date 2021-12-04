@@ -29,5 +29,16 @@ class News(
             createdAt = news.createdAt,
         )
     }
+
+    fun toDTO(): NewsDTO {
+        return NewsDTO(
+                id = id!!,
+                stockCode = stockCode,
+                title = title,
+                link = link,
+                description = description,
+                createdAt = createdAt
+        )
+    }
 }
 

@@ -15,6 +15,7 @@ class NewsRouter(
     fun newsRoute() = coRouter {
         "/news".nest {
             accept(MediaType.APPLICATION_JSON).nest {
+                GET("", newsHandler::getNews)
                 GET("/search", newsHandler::searchNewsByCompanyName)
                 GET("/{stockCode}", newsHandler::getNewsByStockCode)
             }
