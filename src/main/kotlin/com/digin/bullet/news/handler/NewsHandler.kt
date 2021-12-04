@@ -33,7 +33,7 @@ class NewsHandler(
     }
 
     suspend fun searchNewsByCompanyName(serverRequest: ServerRequest): ServerResponse {
-        val pageRequest = getPageRequest(serverRequest)
+        val pageRequest = getPageRequestWithoutSort(serverRequest)
         val keyword = serverRequest.queryParamOrNull("keyword") ?: ""
 
         val companies = companyService.getCompaniesByName(name = keyword, pageRequest)
