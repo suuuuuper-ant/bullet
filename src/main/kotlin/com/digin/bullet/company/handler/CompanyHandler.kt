@@ -4,6 +4,7 @@ import arrow.core.*
 import com.digin.bullet.common.model.http.response.ErrorResponse
 import com.digin.bullet.common.model.http.response.SuccessResponse
 import com.digin.bullet.common.util.getPageRequest
+import com.digin.bullet.common.util.getPageRequestWithoutSort
 import com.digin.bullet.company.model.exception.CompanyException
 import com.digin.bullet.company.model.http.response.CompanyDetailResponse
 import com.digin.bullet.company.service.CompanyService
@@ -41,7 +42,7 @@ class CompanyHandler(
 
     suspend fun searchCompaniesByName(serverRequest: ServerRequest): ServerResponse {
         val keyword = serverRequest.queryParamOrNull("keyword") ?: return ServerResponse.badRequest().bodyValueAndAwait(CompanyException.INPUT_EMPTY)
-        val companies = companyService.getCompaniesByName(name = keyword, pageable = getPageRequest(serverRequest))
+        val companies = companyService.getCompaniesByName(name = keyword, pageable = getPageRequestWithoutSort(serverRequest))
         return when(companies) {
             is Either.Left -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = listOf("")))
             is Either.Right -> ServerResponse.ok().bodyValueAndAwait(SuccessResponse(result = companies.getOrElse {  }))

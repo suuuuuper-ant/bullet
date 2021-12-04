@@ -16,6 +16,13 @@ fun getPageRequest(serverRequest: ServerRequest): PageRequest {
     return PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "updatedAt"))
 }
 
+fun getPageRequestWithoutSort(serverRequest: ServerRequest): PageRequest {
+    val page = serverRequest.queryParamOrNull("page")?.toInt() ?: 0
+    val size = serverRequest.queryParamOrNull("size")?.toInt() ?: 5
+
+    return PageRequest.of(page, size)
+}
+
 
 val defaultPageRequest = PageRequest.of(0, 5, Sort.by(Sort.Direction.DESC, "updatedAt"))
 

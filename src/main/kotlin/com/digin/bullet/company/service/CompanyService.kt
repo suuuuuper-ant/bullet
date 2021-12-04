@@ -65,9 +65,9 @@ class CompanyService(
     }
 
     suspend fun getCompaniesByName(name: String, pageable: Pageable): Either<CompanyException, List<CompanyDTO>> {
-        val companies = companyRepository.getCompaniesByKrNameContaining(name = name, pageable = PageRequest.of(0, 5))
+        val companies = companyRepository.getCompaniesByKrNameContaining(name = name, pageable = pageable)
             .toList()
-            .map { it.toDTO(it) }
+            .map { it.toDTO() }
         if (companies.isEmpty()) {
             return Either.Left(CompanyException.NOT_FOUND_COMPANY)
         }
